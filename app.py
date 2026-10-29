@@ -226,12 +226,12 @@ if new_df is None:
     st.stop()
 
 
-API_KEY = "YOUR_TMDB_API_KEY"
+API_KEY = "4514bb4b97b5774ee0a09e083a573b75"
 
 
 @st.cache_data(ttl=3600, show_spinner=False)
 def fetch_poster(title):
-    if not API_KEY or API_KEY == "YOUR_TMDB_API_KEY":
+    if not API_KEY or API_KEY == "4514bb4b97b5774ee0a09e083a573b75":
         return None
 
     url = "https://api.themoviedb.org/3/search/movie"
