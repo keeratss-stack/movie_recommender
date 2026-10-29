@@ -101,25 +101,28 @@ def fetch_poster(title):
     if not API_KEY or API_KEY == "4514bb4b97b5774ee0a09e083a573b75":
         return None
 
-    url = "https://api.themoviedb.org/3/search/movie"
+    headers = {}
+    params = {"query": title}
+    if len(API_KEY) > 40:
+        headers["Authorization"] = f"Bearer {API_KEY}"
+    else:
+        params["api_key"] = API_KEY
+
     try:
         response = requests.get(
-            url,
-            params={"api_key": API_KEY, "query": title},
+            "https://api.themoviedb.org/3/search/movie",
+            headers=headers,
+            params=params,
             timeout=10,
         )
         response.raise_for_status()
         results = response.json().get("results", [])
-
-        if results:
-            poster_path = results[0].get("poster_path")
-            if poster_path:
-                return f"https://image.tmdb.org/t/p/w500/{poster_path}"
     except requests.RequestException:
         return None
 
+    if results and results[0].get("poster_path"):
+        return f"https://image.tmdb.org/t/p/w500{results[0]['poster_path']}"
     return None
-
 
 def recommend_with_details(movie):
     matching_movies = new_df["title"].str.lower() == movie.lower()
