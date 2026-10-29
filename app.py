@@ -10,7 +10,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 
 
 # Keep both CSV files in the same folder as app.py.
-credits = pd.read_csv("tmdb_5000_credits.csv", engine="python", quotechar='"')
+credits = pd.read_csv("tmdb_5000_credits.csv.gz", engine="python", quotechar='"')
 movies_df = pd.read_csv("tmdb_5000_movies.csv", engine="python", quotechar='"')
 
 movies_df = movies_df.merge(credits, on="title")
