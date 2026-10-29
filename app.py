@@ -226,15 +226,16 @@ if new_df is None:
     st.stop()
 
 
-API_KEY = "4514bb4b97b5774ee0a09e083a573b75"
 
+API_KEY = st.secrets.get("TMDB_API_KEY", "")
 
 @st.cache_data(ttl=3600, show_spinner=False)
 def fetch_poster(title):
-    if not API_KEY or API_KEY == "4514bb4b97b5774ee0a09e083a573b75":
+    if not API_KEY:
         return None
 
     url = "https://api.themoviedb.org/3/search/movie"
+
     try:
         response = requests.get(
             url,
@@ -242,17 +243,18 @@ def fetch_poster(title):
             timeout=10,
         )
         response.raise_for_status()
+
         results = response.json().get("results", [])
 
         if results:
             poster_path = results[0].get("poster_path")
             if poster_path:
                 return f"https://image.tmdb.org/t/p/w500{poster_path}"
+
     except requests.RequestException:
         return None
 
     return None
-
 
 def top_matches(movie):
     matching_movies = new_df["title"].str.lower() == movie.lower()
